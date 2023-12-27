@@ -51,7 +51,7 @@ class Ball:
         self.xPos = xPos
         self.yPos = yPos
         self.rad = rad
-        self.xSpeed = 0
+        self.xSpeed = 0.1
         self.ySpeed = 0.1
     
     def drawBall(self):
@@ -73,23 +73,34 @@ ball = Ball(300,300,10)
 
 
 fortsett = True
-while fortsett:
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            fortsett = False
-    vindu.fill((255,255,255))
 
-    trykkedeTaster = pg.key.get_pressed()
-    rightPaddle.movePaddle(trykkedeTaster)
-    leftPaddle.movePaddle(trykkedeTaster)
+while rightPaddle.points<=10 or leftPaddle.points <=10:
+    while fortsett:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                fortsett = False
+        vindu.fill((255,255,255))
 
-    rightPoints = font.render(str(rightPaddle.points), True, (0,0,0))
-    vindu.blit(rightPoints, (320,20))
+        trykkedeTaster = pg.key.get_pressed()
+        rightPaddle.movePaddle(trykkedeTaster)
+        leftPaddle.movePaddle(trykkedeTaster)
 
-    leftPoints = font.render(str(leftPaddle.points), True, (0,0,0))
-    vindu.blit(leftPoints, (280,20))
+        rightPoints = font.render(str(rightPaddle.points), True, (0,0,0))
+        vindu.blit(rightPoints, (320,20))
 
-    ball.moveBall()
+        leftPoints = font.render(str(leftPaddle.points), True, (0,0,0))
+        vindu.blit(leftPoints, (280,20))
 
+        ball.moveBall()
 
-    pg.display.flip()
+        if rightPaddle.getRect().colliderect(ball.getRect()) or leftPaddle.getRect().colliderect(ball.getRect()):
+            ball.xSpeed = -ball.xSpeed
+        
+        if ball.xPos > 600:
+            leftPaddle.points+=1
+            break
+        elif ball.xPos < 0:
+            rightPaddle.points+=1
+            break
+
+        pg.display.flip()

@@ -45,6 +45,13 @@ class Paddle:
     def getRect(self):
         return pg.Rect(self.xPos,self.yPos,self.width,self.length)
 
+def randomTupleSumOne():
+    while True:
+        num1 = rd.randint(5,15)
+        num2 = rd.randint(5,15)
+        if num1+num2 == 20:
+            return (num1/100,num2/100)
+
 
 class Ball:
     def __init__(self, xPos,yPos,rad):
@@ -74,11 +81,14 @@ ball = Ball(300,300,10)
 
 fortsett = True
 
-while rightPaddle.points<=10 or leftPaddle.points <=10:
+while (rightPaddle.points<10 and leftPaddle.points <10):
+    print(leftPaddle.points<=10)
+    ball = Ball(300,300,10)
+    fortsett = True
     while fortsett:
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                fortsett = False
+                pg.quit()
         vindu.fill((255,255,255))
 
         trykkedeTaster = pg.key.get_pressed()
@@ -94,13 +104,20 @@ while rightPaddle.points<=10 or leftPaddle.points <=10:
         ball.moveBall()
 
         if rightPaddle.getRect().colliderect(ball.getRect()) or leftPaddle.getRect().colliderect(ball.getRect()):
-            ball.xSpeed = -ball.xSpeed
+            newXSpeed, newYSpeed = randomTupleSumOne()
+            if ball.xPos>300:
+                ball.xSpeed = -newXSpeed
+                ball.ySpeed = newYSpeed
+            else:
+                ball.xSpeed = newXSpeed
+                ball.ySpeed = newYSpeed
         
         if ball.xPos > 600:
             leftPaddle.points+=1
-            break
+            fortsett = False
         elif ball.xPos < 0:
             rightPaddle.points+=1
-            break
+            fortsett = False
+
 
         pg.display.flip()

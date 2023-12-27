@@ -47,19 +47,20 @@ class Paddle:
 
 def randomTupleSumOne():
     while True:
-        num1 = rd.randint(5,15)
-        num2 = rd.randint(5,15)
-        if num1+num2 == 20:
+        num1 = rd.randint(3,18)
+        num2 = rd.randint(3,18)
+        if num1+num2 == 25:
             return (num1/100,num2/100)
 
 
 class Ball:
+    xs,ys = randomTupleSumOne()
     def __init__(self, xPos,yPos,rad):
         self.xPos = xPos
         self.yPos = yPos
         self.rad = rad
-        self.xSpeed = 0.1
-        self.ySpeed = 0.1
+        self.xSpeed = self.xs
+        self.ySpeed = self.ys
     
     def drawBall(self):
         pg.draw.rect(vindu, (0,0,0), (self.xPos,self.yPos, self.rad,self.rad))
@@ -82,8 +83,9 @@ ball = Ball(300,300,10)
 fortsett = True
 
 while (rightPaddle.points<10 and leftPaddle.points <10):
-    print(leftPaddle.points<=10)
     ball = Ball(300,300,10)
+    if rd.randint(0,10) > 5:
+        ball.xSpeed = -ball.xSpeed
     fortsett = True
     while fortsett:
         for event in pg.event.get():
